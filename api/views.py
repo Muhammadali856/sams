@@ -59,3 +59,8 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Yaratishda ham faqat User ning o'zini saqlaymiz
         serializer.save(student=self.request.user)
+
+class ProgrammeViewSet(viewsets.ModelViewSet):
+    queryset = Programme.objects.all()
+    serializer_class = ProgrammeSerializer
+    permission_classes = [IsAuthenticated]

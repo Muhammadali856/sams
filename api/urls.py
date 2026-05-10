@@ -7,6 +7,7 @@ router = DefaultRouter()
 
 router.register(r'assignments', AssignmentViewSet, basename='assignment')
 router.register(r'tasks', TaskViewSet, basename='task')
+router.register(r'programmes', ProgrammeViewSet, basename='programme')
 
 urlpatterns = [
     path('', include(router.urls)),
