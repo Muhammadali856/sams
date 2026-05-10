@@ -2,7 +2,7 @@ from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
-from .models import Assignment, Task
+from .models import Programme, Assignment, Task, Student, Teacher
 from .serializers import AssignmentSerializer, TaskSerializer, RegisterStudentSerializer, ProgrammeSerializer
 
 
