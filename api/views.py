@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from .models import Assignment, Task
-from .serializers import AssignmentSerializer, TaskSerializer, RegisterStudentSerializer
+from .serializers import AssignmentSerializer, TaskSerializer, RegisterStudentSerializer, ProgrammeSerializer
 
 
 class IsTeacherOrReadOnly(permissions.BasePermission):
