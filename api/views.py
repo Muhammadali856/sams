@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from .models import Programme, Assignment, Task, Student, Teacher
-from .serializers import AssignmentSerializer, TaskSerializer, RegisterStudentSerializer, ProgrammeSerializer
-
+from .serializers import AssignmentSerializer, TaskSerializer, 
+from .serializers import StudentSerializer, RegisterStudentSerializer, ProgrammeSerializer
 
 class IsTeacherOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -63,4 +63,9 @@ class TaskViewSet(viewsets.ModelViewSet):
 class ProgrammeViewSet(viewsets.ModelViewSet):
     queryset = Programme.objects.all()
     serializer_class = ProgrammeSerializer
+    permission_classes = [IsAuthenticated]
+
+class StudentViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
