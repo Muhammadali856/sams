@@ -61,7 +61,11 @@ class TaskViewSet(viewsets.ModelViewSet):
 class ProgrammeViewSet(viewsets.ModelViewSet):
     queryset = Programme.objects.all()
     serializer_class = ProgrammeSerializer
-    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
 
 class StudentViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Student.objects.all()
