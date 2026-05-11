@@ -36,15 +36,13 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         
-        # Agar so'rov yuboruvchi o'qituvchi bo'lsa, unga hamma topshiriqlarni ko'rsatamiz
         if hasattr(user, 'teacher'):
             return Assignment.objects.all()
             
-        # Agar u talaba bo'lsa, faqat uning yo'nalishiga (programme) tegishli topshiriqlarni beramiz
         elif hasattr(user, 'student_profile'):
-            return Assignment.objects.filter(programme=user.student_profile.programme)
+            # Use __in to fetch assignments from ALL enrolled programmes
+            return Assignment.objects.filter(programme__in=user.student_profile.programmes.all())
             
-        # Noma'lum foydalanuvchi bo'lsa, hech narsa ko'rsatmaymiz
         return Assignment.objects.none()
 
 # 3. Task (Shaxsiy topshiriqlar) uchun CRUD API

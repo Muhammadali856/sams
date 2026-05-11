@@ -35,31 +35,40 @@ class StudentSerializer(serializers.ModelSerializer):
 # Talaba ro'yxatdan o'tayotganda ham User, ham Student profilini birga yaratish uchun
 class RegisterStudentSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    programme_id = serializers.IntegerField(write_only=True)
-    
-    # This line tells Django: "Look for 'student_id' in the JSON, 
-    # but save it into the 'username' column in the database."
+    # Changed to ListField to accept an array like [1, 2, 4]
+    programme_ids = serializers.ListField(
+        child=serializers.IntegerField(), write_only=True
+    )
     student_id = serializers.CharField(source='username') 
 
     class Meta:
         model = User
-        # IMPORTANT: Remove 'username' and add 'student_id' here
-        fields = ['student_id', 'password', 'first_name', 'last_name', 'email', 'programme_id']
+        fields = ['student_id', 'password', 'first_name', 'last_name', 'email', 'programme_ids']
+
+    # This built-in method automatically validates the programme_ids array
+    def validate_programme_ids(self, value):
+        if len(value) > 6:
+            raise serializers.ValidationError("A student can only choose up to 6 programmes.")
+        if len(value) == 0:
+            raise serializers.ValidationError("A student must choose at least 1 programme.")
+        return value
 
     def create(self, validated_data):
         password = validated_data.pop('password')
-        programme_id = validated_data.pop('programme_id')
+        programme_ids = validated_data.pop('programme_ids')
         
-        # validated_data['username'] will now contain what the frontend sent as 'student_id'
         user = User.objects.create(**validated_data)
         user.set_password(password)
         user.save()
 
-        programme = Programme.objects.get(id=programme_id)
-        Student.objects.create(user=user, programme=programme)
+        # Create the student profile first
+        student = Student.objects.create(user=user)
+        
+        # Fetch the selected programmes from the database and link them to the student
+        programmes = Programme.objects.filter(id__in=programme_ids)
+        student.programmes.set(programmes)
 
         return user
-
 # Vazifalar uchun serializer
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:

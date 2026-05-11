@@ -13,10 +13,13 @@ class TeacherAdmin(admin.ModelAdmin):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    # Admin panelda talabaning ismi, yo'nalishi va statusi ko'rinib turadi
-    list_display = ('id', 'user', 'programme', 'is_active')
-    list_filter = ('programme', 'is_active')
+    list_display = ('id', 'user', 'display_programmes', 'is_active')
+    
+    list_filter = ('programmes', 'is_active')
     search_fields = ('user__username', 'user__first_name')
+    def display_programmes(self, obj):
+        return ", ".join([p.name for p in obj.programmes.all()])
+    display_programmes.short_description = 'Programmes'
 
 @admin.register(Assignment)
 class AssignmentAdmin(admin.ModelAdmin):

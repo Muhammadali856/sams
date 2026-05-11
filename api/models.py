@@ -19,7 +19,8 @@ class Teacher(models.Model):
 # 3. Student (Talabalar profili) jadvali
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
-    programme = models.ForeignKey(Programme, on_delete=models.SET_NULL, null=True, related_name='students')
+    # Change this line! No more on_delete, and no more null=True
+    programmes = models.ManyToManyField(Programme, related_name='students')
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
