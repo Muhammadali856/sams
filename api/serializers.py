@@ -26,9 +26,11 @@ class TeacherSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     
+    programme_name = serializers.CharField(source='programme.name', read_only=True)
+    
     class Meta:
         model = Student
-        fields = '__all__'
+        fields = ['id', 'user', 'programme', 'programme_name', 'is_active']
 
 # Talaba ro'yxatdan o'tayotganda ham User, ham Student profilini birga yaratish uchun
 class RegisterStudentSerializer(serializers.ModelSerializer):
