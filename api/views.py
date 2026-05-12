@@ -1,10 +1,10 @@
-from rest_framework import viewsets, generics, status
+from rest_framework import viewsets, generics, status, permissions
 from rest_framework.response import Response
-from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from .models import Programme, Assignment, Task, Student, Teacher
 from .serializers import AssignmentSerializer, TaskSerializer
 from .serializers import StudentSerializer, RegisterStudentSerializer, ProgrammeSerializer
+from rest_framework.views import APIView
 
 class IsTeacherOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -71,3 +71,26 @@ class StudentViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticated]
+
+class UpdateStudentProgrammesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        user = request.user
+        
+        # Make sure the user is actually a student
+        if not hasattr(user, 'student_profile'):
+            return Response({"error": "Only students can update programmes."}, status=status.HTTP_403_FORBIDDEN)
+            
+        student = user.student_profile
+        new_programme_ids = request.data.get('programme_ids', [])
+        
+        # Enforce your maximum 6 rule here again
+        if len(new_programme_ids) > 6 or len(new_programme_ids) == 0:
+            return Response({"error": "Must select between 1 and 6 programmes."}, status=status.HTTP_400_BAD_REQUEST)
+            
+        # Update the many-to-many relationship
+        programmes = Programme.objects.filter(id__in=new_programme_ids)
+        student.programmes.set(programmes)
+        
+        return Response({"message": "Programmes updated successfully!"}, status=status.HTTP_200_OK)
