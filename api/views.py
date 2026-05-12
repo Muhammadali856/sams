@@ -1,7 +1,7 @@
 from rest_framework import viewsets, generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Programme, Assignment, Task, Student, Teacher
+from .models import Programme, Assignment, Task, Student, Teacher, Quiz
 from .serializers import AssignmentSerializer, TaskSerializer
 from .serializers import StudentSerializer, RegisterStudentSerializer, ProgrammeSerializer, QuizSerializer
 from rest_framework.views import APIView
