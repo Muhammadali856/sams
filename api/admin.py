@@ -36,3 +36,9 @@ class TaskAdmin(admin.ModelAdmin):
     list_filter = ('status',)
     search_fields = ('name', 'student__username')
     ordering = ('-created_at',)
+
+@admin.register(Quiz)
+class QuizAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'programme')
+    list_filter = ('programme',)
+    search_fields = ('name',)

@@ -82,9 +82,6 @@ class AssignmentSerializer(serializers.ModelSerializer):
         model = Assignment
         # student va status ni bu yerdan butunlay olib tashlaymiz:
         fields = ['id', 'programme', 'name', 'description', 'deadline', 'created_at'] 
-        
-        # Yoki shunchaki barchasini olish uchun quyidagicha yozib qo'yishingiz ham mumkin:
-        # fields = '__all__'
 
 # Shaxsiy tasklar uchun serializer
 class TaskSerializer(serializers.ModelSerializer):
