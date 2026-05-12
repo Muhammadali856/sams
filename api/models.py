@@ -54,3 +54,14 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.get_status_display()}"
+
+# Add this below your Assignment model
+class Quiz(models.Model):
+    programme = models.ForeignKey(Programme, on_delete=models.CASCADE, related_name='quizzes')
+    name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    deadline = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

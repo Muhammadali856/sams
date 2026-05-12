@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Programme, Assignment, Task, Student, Teacher
 from .serializers import AssignmentSerializer, TaskSerializer
-from .serializers import StudentSerializer, RegisterStudentSerializer, ProgrammeSerializer
+from .serializers import StudentSerializer, RegisterStudentSerializer, ProgrammeSerializer, QuizSerializer
 from rest_framework.views import APIView
 
 class IsTeacherOrReadOnly(permissions.BasePermission):
@@ -94,3 +94,20 @@ class UpdateStudentProgrammesView(APIView):
         student.programmes.set(programmes)
         
         return Response({"message": "Programmes updated successfully!"}, status=status.HTTP_200_OK)
+
+class QuizViewSet(viewsets.ModelViewSet):
+    serializer_class = QuizSerializer
+    permission_classes = [IsAuthenticated, IsTeacherOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        
+        # Teachers see all quizzes
+        if hasattr(user, 'teacher'):
+            return Quiz.objects.all()
+            
+        # Students see quizzes for their enrolled programmes
+        elif hasattr(user, 'student_profile'):
+            return Quiz.objects.filter(programme__in=user.student_profile.programmes.all())
+            
+        return Quiz.objects.none()

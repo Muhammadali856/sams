@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import AssignmentViewSet, TaskViewSet, StudentSignUpView 
-from .views import UpdateStudentProgrammesView, ProgrammeViewSet, StudentViewSet
+from .views import UpdateStudentProgrammesView, ProgrammeViewSet, StudentViewSet, QuizViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = DefaultRouter()
@@ -10,6 +10,7 @@ router.register(r'assignments', AssignmentViewSet, basename='assignment')
 router.register(r'tasks', TaskViewSet, basename='task')
 router.register(r'programmes', ProgrammeViewSet, basename='programme')
 router.register(r'students', StudentViewSet, basename='student')
+router.register(r'quizzes', QuizViewSet, basename='quiz')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Programme, Teacher, Student, Assignment, Task
+from .models import Programme, Teacher, Student, Assignment, Task, Quiz
 
 # Foydalanuvchi ma'lumotlarini chiroyli formatda qaytarish uchun yordamchi serializer
 class UserSerializer(serializers.ModelSerializer):
@@ -94,3 +94,8 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ['id', 'student', 'name', 'description', 'status', 'created_at']
+
+class QuizSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quiz
+        fields = ['id', 'programme', 'name', 'description', 'deadline', 'created_at']
