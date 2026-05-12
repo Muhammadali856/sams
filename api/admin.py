@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Programme, Teacher, Student, Assignment, Task
+from .models import Programme, Teacher, Student, Assignment, Task, Quiz
 
 @admin.register(Programme)
 class ProgrammeAdmin(admin.ModelAdmin):
